@@ -7,9 +7,7 @@ export const getUsersForSidebar = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
         const filteredUsers = await User.find({_id: {
-            $ne:loggedInUserId}}.select("-password")
-        );
-
+            $ne:loggedInUserId}}).select("-password");
         res.status(200).json(filteredUsers)
     } catch (error) {
         console.log("error in getusersforsidebar controller", error.message);
@@ -25,7 +23,7 @@ export const getMessages = async (req, res) => {
 
         const messages = await Message.find({
             $or: [
-                {senderId:myId, receiverId:userToChatid},
+                {senderId:myId, receiverId:userToChatId},
                 {senderId:userToChatId, receiverId:myId}
             ]
         })
@@ -47,7 +45,7 @@ export const sendMessages = async (req, res) => {
         let imageUrl;
         if (image) {
             //upload base64 image to cloudinary
-            const uploadResponse = await cloudinary.upload(image);
+            const uploadResponse = await cloudinary.uploader.upload(image);
             imageUrl = uploadResponse.secure_url;
         }
         
