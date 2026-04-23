@@ -2,6 +2,7 @@ import { Mail, MessageSquare, User, Lock, Eye, EyeOff, Loader2 } from "lucide-re
 import { useAuthStore } from "../store/useAuthStore.js";
 import { useState } from "react";
 import { Link } from "react-router-dom"; // Assuming you want a link to the login page
+import toast from "react-hot-toast";
 
 function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,10 +15,10 @@ function SignUpPage() {
     const { signup, isSigningUp } = useAuthStore();
 
     const validateForm = () => {
-        if (!formData.fullName.trim()) return console.log("Full name is required");
-        if (!formData.email.trim()) return console.log("Email is required");
-        if (!/\S+@\S+\.\S+/.test(formData.email)) return console.log("Invalid email format");
-        if (formData.password.length < 6) return console.log("Password must be at least 6 characters");
+        if (!formData.fullName.trim()) return toast.error("Full name is required");
+        if (!formData.email.trim()) return toast.error("Email is required");
+        if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
+        if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
         
         return true;
     };
