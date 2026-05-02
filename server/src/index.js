@@ -6,10 +6,10 @@ import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import messageRoutes from "./routes/message.route.js";
 import cors from "cors"
+import {app, server} from "./lib/socket.js";
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 dotenv.config();
 
-const app = express();
 
 const PORT = process.env.PORT || 6767;
 
@@ -19,9 +19,11 @@ app.use(cors({
     origin: "http://localhost:5173",
     credentials: true
 }));
+
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes)
-app.listen(PORT, () => {
+app.use("/api/messages", messageRoutes)
+
+server.listen(PORT, () => {
     console.log("server is running on PORT:"+ PORT);
     connectDB();
 })
