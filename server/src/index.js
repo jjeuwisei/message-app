@@ -7,12 +7,15 @@ import cookieParser from "cookie-parser";
 import messageRoutes from "./routes/message.route.js";
 import cors from "cors"
 import {app, server} from "./lib/socket.js";
+import path from "path";
+
+
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 dotenv.config();
 
 
-const PORT = process.env.PORT || 6767;
-
+const PORT = process.env.PORT;
+const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
