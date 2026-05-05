@@ -26,11 +26,21 @@ app.use(cors({
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes)
 
-if(process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "../client/dist")));
+if (process.env.NODE_ENV === "production") {
+    const distPath = path.join(__dirname, "../client/dist");
+    
+    app.use(express.static(distPath));
 
-    app.get("/:path*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+    // This middleware approach doesn't use strings like "*", 
+    // so it cannot trigger the PathError crash.
+    app.use((req, res, next) => {
+        // If the request starts with /api, let it fall through 
+        // (in case of a 404 API error)
+        if (req.url.startsWith("/api")) {
+            return next();
+        }
+        // Otherwise, send the frontend
+        res.sendFile(path.join(distPath, "index.html"));
     });
 }
 
